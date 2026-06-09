@@ -1,0 +1,16 @@
+# Ignore the virtual enviornment
+myvenv/
+
+# Ignore the .env file -> API keys
+.env
+
+# Ignore the cache of the project
+
+__pycache__
+
+# Ignore the rough files
+trial.py
+Data.txt
+
+#Ignore the chroma vectorstore
+MyDB/
