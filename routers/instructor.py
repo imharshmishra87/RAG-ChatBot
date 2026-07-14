@@ -19,11 +19,11 @@ model=Basechat()
 
 
 
-router=APIRouter(prefix="/instructor",tags=["instructor"])
+router=APIRouter(prefix="/Instructor",tags=["instructor"])
 
 
 @router.post('/upload')
-def uploadfile(file : validate, current_user:dict=Depends(required_role("instructor"))):
+def uploadfile(file : validate, current_user:dict=Depends(required_role("Instructor"))):
 
     # This method is mainly responsible for uploading the transcripts -> Chunking it -> Further storing it as an embedding in the database.
 
@@ -85,7 +85,7 @@ def uploadfile(file : validate, current_user:dict=Depends(required_role("instruc
 
 
 @router.delete('/course{course_id}/video{video_id}')
-def deletevideo(data:DelVideo, current_user:dict=Depends(required_role("instructor"))):
+def deletevideo(data:DelVideo, current_user:dict=Depends(required_role("Instructor"))):
 
     # Mainly responsible for deleting the course video transcript, it first checks whether the course or video exist in the database if not it raises an error and if it exists it deletes the video transcript based on the filter method by passing course_id and video_id as a filter.
 
@@ -119,7 +119,7 @@ def deletevideo(data:DelVideo, current_user:dict=Depends(required_role("instruct
 
 
 @router.put("/course{course_id}/video{video_id}")
-def update(data:Updatedata,current_user:dict=Depends(required_role("instructor"))):
+def update(data:Updatedata,current_user:dict=Depends(required_role("Instructor"))):
 
     # Mainly responsible for updating the video transcript usually involve by first deleting the video transcript and then updating it with a fresh transcript uploaded from the frontend. It first checks whether the course or video exist in the database if not it raises an error and if it exists it deletes the video transcript based on the filter method by passing course_id and video_id as a filter and then it updates with the new transcript.
 
