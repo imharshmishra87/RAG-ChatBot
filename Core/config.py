@@ -4,7 +4,9 @@ class Settings(BaseSettings):
     algorithm:str="HS256"
     secret_key:str
     access_token_time:int=15
+    refresh_token_time:int=7
     database_url:str | None=None
+
 
     model_config=SettingsConfigDict(env_file=".env",extra="ignore")
 
