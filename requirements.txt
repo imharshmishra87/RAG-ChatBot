@@ -34,3 +34,11 @@ pandas==3.0.3
 requests==2.34.2
 aiohttp==3.13.5
 pydantic-settings==2.14.1
+
+
+sqlalchemy==2.0.28
+alembic==1.13.1
+psycopg2-binary==2.9.9
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+apscheduler
