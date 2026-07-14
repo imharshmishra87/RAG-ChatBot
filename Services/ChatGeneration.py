@@ -3,13 +3,20 @@ from langchain_core.prompts import PromptTemplate,ChatPromptTemplate, MessagesPl
 from langchain_core.runnables import RunnableSequence
 from langchain_core.messages import HumanMessage,AIMessage
 from langchain_core.output_parsers import StrOutputParser
-
-from Config.pinecone_config import pineconevectorstore
+from Core.database import get_db
+from Model.model import get_history
+from Model import model
+from Vectordb.pinecone_config import pineconevectorstore
 from fastapi.exceptions import HTTPException
+
+from sqlalchemy.orm import Session
+from fastapi import Depends
 
 vectorstore=pineconevectorstore()
 
+
 parser=StrOutputParser()
+
 
 model=ChatGoogleGenerativeAI(model='gemini-3.1-flash-lite', model_kwargs={"device":0})
 
@@ -27,19 +34,31 @@ prompt=ChatPromptTemplate.from_messages([
     ("human","{query}")
 ])
 
-messages=[]
+
 
 class VideoNotFoundError(Exception):
     pass
 
 
 
+
+
+
+messages=[]
+
 class Basechat:
     def __init__(self):
         pass
 
-    def chat(self, query:str,course_id:str, video_id):
-        messages.append(HumanMessage(content=query))
+    def chat(self, db:Session,query:str,course_id:str, video_id:str,session_id:str,user_id:int):
+
+        history=get_history(db=db,user_id=user_id,session_id=session_id)
+
+        for msg in history:
+            if (msg.role=="User" or msg.role=="Instructor"):
+                messages.append(HumanMessage(content=msg.content))
+            messages.append(AIMessage(content=msg.content))
+
 
         context=retriever.invoke(query,filter={
             "course_id":course_id,
@@ -57,7 +76,7 @@ class Basechat:
                 "chat_history":messages,
                 "query":query
             })
-            messages.append(AIMessage(result))
+
             return {
                 "status":"Success",
                 "AImessage":result,
